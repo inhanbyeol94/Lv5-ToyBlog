@@ -17,9 +17,8 @@ class PostsController {
   createPost = async (req, res, next) => {
     const { title, content } = req.body;
     const { id } = res.locals.user;
-
-    await this.postService.createPost(id, title, content);
-    return res.status(200).json({ message: '게시물이 정상적으로 생성되었습니다.' });
+    const createPostData = await this.postService.createPost(id, title, content);
+    return res.status(200).json({ message: '게시물이 정상적으로 생성되었습니다.', postId: createPostData });
   };
 
   updatePost = async (req, res, next) => {
