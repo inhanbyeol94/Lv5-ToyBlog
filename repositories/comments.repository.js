@@ -2,7 +2,7 @@ const { Comment, Member, sequelize } = require('../models');
 
 class CommentRepository {
   findAllComment = async (postId) => {
-    return await Comment.findAll({ where: { post_id: postId }, attributes: ['comment_id', 'content', 'created_at', 'updated_at'], include: [{ model: Member, attributes: ['nickname'] }] });
+    return await Comment.findAll({ where: { post_id: postId }, attributes: ['comment_id', 'content', 'created_at', 'updated_at'], include: [{ model: Member, attributes: ['nickname'] }], order: [['created_at', 'DESC']] });
   };
   createComment = async (postId, id, content) => {
     return await Comment.create({ post_id: postId, user_id: id, content });
