@@ -30,6 +30,7 @@ const commentsValidation = {
   },
 
   updateValidation: async (req, res, next) => {
+    const { id } = res.locals.user;
     const { postId, commentId } = req.params;
     const { content } = req.body;
 
@@ -61,8 +62,8 @@ const commentsValidation = {
   },
 
   deleteValidation: async (req, res, next) => {
+    const { id } = res.locals.user;
     const { postId, commentId } = req.params;
-    const { content } = req.body;
 
     const schema = Joi.object().keys({
       postId: Joi.number().empty().required().messages(comment.postId),
