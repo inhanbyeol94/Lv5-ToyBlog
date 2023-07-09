@@ -1,13 +1,20 @@
-const { Post, Member } = require('../models');
-const { Op } = require('sequelize');
+const { Post, Member, Like } = require('../models');
+const { Op, Sequelize } = require('sequelize');
 
 class PostRepository {
   findAllPost = async () => {
-    return await Post.findAll({ include: [{ model: Member, attributes: ['id', 'nickname'] }], attributes: ['post_id', 'title', 'created_at', 'updated_at'], raw: true });
+    return await Post.findAll({
+      include: [
+        { model: Member, attributes: ['nickname'] },
+        { model: Like, attributes: [[Sequelize.literal(`(SELECT COUNT(*) FROM Likes WHERE post_id = Post.post_id)`), 'like']] },
+      ],
+      raw: true,
+      nest: true,
+    });
   };
 
   findOnePost = async (postId) => {
-    return await Post.findOne({ where: { post_id: postId } });
+    return await Post.findOne({ where: { post_id: postId }, include: [{ model: Member }], attributes: { include: [[Sequelize.literal(`(SELECT COUNT(*) FROM Likes WHERE post_id = Post.post_id)`), 'like']] }, raw: true, nest: true });
   };
 
   createPost = async (id, title, content) => {
