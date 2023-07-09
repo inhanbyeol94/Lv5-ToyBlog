@@ -41,7 +41,7 @@ const membersValidation = {
 
     try {
       if (await Member.findOne({ where: { user_id: body.id } })) return res.status(412).json({ message: user.overlapId });
-      if (await Member.findOne({ where: { nickname: body.nickname } })) return res.status(412).json({ message: user.overlapId });
+      if (await Member.findOne({ where: { nickname: body.nickname } })) return res.status(412).json({ message: user.overlapNickname });
     } catch (err) {
       console.error(err);
       return res.status(400).json({ message: '오류가 발생하였습니다.' });

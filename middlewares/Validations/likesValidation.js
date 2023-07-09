@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const Joi = require('joi');
-const { like } = require('../../message.json');
+const { like, database, error } = require('../../message.json');
 const { Post } = require('../../models');
 
 const likesValidation = {
@@ -18,11 +18,14 @@ const likesValidation = {
     }
 
     try {
-      const postValidation = await Post.findOne({ where: { post_id: postId } });
-      if (!postValidation) return res.status(412).json({ message: '게시글이 존재하지 않습니다.' });
+      const findPost = await Post.findOne({ where: { post_id: postId } });
+      const likeAuthorValid = await Post.findOne({ where: { post_id: postId, user_id: id } });
+
+      if (!findPost) return res.status(412).json({ message: database.postNotfound });
+      if (likeAuthorValid) return res.status(412).json({ message: database.likesAuthorNotFound });
     } catch (err) {
       console.error(err);
-      return res.status(400).json({ message: '오류가 발생하였습니다.' });
+      return res.status(400).json({ message: error });
     }
 
     next();

@@ -78,5 +78,13 @@
       "any.required": "postId를 입력해 주세요.",
       "string.empty": "postId를 입력해 주세요."
     }
-  }
+  },
+  "database": {
+    "postNotfound": "게시물이 존재하지 않습니다.",
+    "commentNotfound": "댓글이 존재하지 않습니다.",
+    "postsAuthorNotFound": "해당 작업은 본인이 작성한 게시물에서만 가능합니다.",
+    "commentsAuthorNotFound": "해당 작업은 본인이 작성한 댓글에서만 가능합니다.",
+    "likesAuthorNotFound": "본인의 게시글에는 좋아요를 할 수 없습니다."
+  },
+  "error": "오류가 발생하였습니다."
 }

@@ -1,7 +1,8 @@
 require('dotenv').config();
 
 const Joi = require('joi');
-const { post } = require('../../message.json');
+const { post, database, error } = require('../../message.json');
+const { Post } = require('../../models');
 
 const postsValidation = {
   createValidation: async (req, res, next) => {
@@ -34,6 +35,17 @@ const postsValidation = {
       return res.status(412).json({ message: err.message });
     }
 
+    try {
+      const findPost = await Post.findOne({ where: { post_id: postId } });
+      const postAuthorValid = await Post.findOne({ where: { post_id: postId, user_id: id } });
+
+      if (!findPost) return res.status(412).json({ message: database.postNotfound });
+      if (!postAuthorValid) return res.status(412).json({ message: database.postsAuthorNotFound });
+    } catch (err) {
+      console.error(err);
+      return res.status(400).json({ message: error });
+    }
+
     next();
   },
 
@@ -47,6 +59,40 @@ const postsValidation = {
       await schema.validateAsync({ postId });
     } catch (err) {
       return res.status(412).json({ message: err.message });
+    }
+
+    try {
+      const findPost = await Post.findOne({ where: { post_id: postId } });
+      const postAuthorValid = await Post.findOne({ where: { post_id: postId, user_id: id } });
+
+      if (!findPost) return res.status(412).json({ message: database.postNotfound });
+      if (!postAuthorValid) return res.status(412).json({ message: database.postsAuthorNotFound });
+    } catch (err) {
+      console.error(err);
+      return res.status(400).json({ message: error });
+    }
+
+    next();
+  },
+
+  readValidation: async (req, res, next) => {
+    const { postId } = req.params;
+
+    const schema = Joi.object().keys({
+      postId: Joi.number().empty().required().messages(post.postId),
+    });
+    try {
+      await schema.validateAsync({ postId });
+    } catch (err) {
+      return res.status(412).json({ message: err.message });
+    }
+
+    try {
+      const findPost = await Post.findOne({ where: { post_id: postId } });
+      if (!findPost) return res.status(412).json({ message: database.postNotfound });
+    } catch (err) {
+      console.error(err);
+      return res.status(400).json({ message: error });
     }
 
     next();
