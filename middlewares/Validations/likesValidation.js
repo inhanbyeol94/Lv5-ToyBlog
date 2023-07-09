@@ -7,6 +7,7 @@ const { Post } = require('../../models');
 const likesValidation = {
   likeValidation: async (req, res, next) => {
     const { postId } = req.params;
+    const { id } = res.locals.user;
 
     const schema = Joi.object().keys({
       postId: Joi.number().empty().required().messages(like.postId),
