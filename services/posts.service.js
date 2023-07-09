@@ -4,15 +4,34 @@ class PostService {
   postRepository = new PostRepository();
 
   findAllPost = async () => {
-    return await this.postRepository.findAllPost();
+    const result = await this.postRepository.findAllPost();
+    return result.map((x) => {
+      return {
+        postId: x.post_id,
+        title: x.title,
+        nickname: x.Member.nickname,
+        content: x.content,
+        createdAt: new Date(x.created_at).toLocaleString(),
+        like: x.Likes.like,
+      };
+    });
   };
 
   findOnePost = async (postId) => {
-    return await this.postRepository.findOnePost(postId);
+    const result = await this.postRepository.findOnePost(postId);
+    return {
+      postId: result.post_id,
+      title: result.title,
+      content: result.content,
+      nickname: result.Member.nickname,
+      like: result.like,
+      createdAt: new Date(result.created_at).toLocaleString(),
+    };
   };
 
   createPost = async (id, title, content) => {
-    return await this.postRepository.createPost(id, title, content);
+    const result = await this.postRepository.createPost(id, title, content);
+    return result.post_id;
   };
 
   updatePost = async (postId, id, title, content) => {
