@@ -13,6 +13,11 @@ fs.readdirSync('./Routes').forEach((Route) => {
   app.use('/', require(`./Routes/${Route}`));
 });
 
+//test
+app.get('/', async (req, res) => {
+  res.status(200).json({ message: 'Hello ;)' });
+});
+
 app.listen(PORT, (err) => {
   if (err) return console.log(err);
   console.log('서버가 구동되었습니다.');
