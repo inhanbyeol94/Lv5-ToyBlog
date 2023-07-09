@@ -34,11 +34,6 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('now'),
       },
-      like: {
-        allowNull: false,
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-      },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
