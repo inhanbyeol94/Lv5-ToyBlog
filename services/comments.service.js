@@ -3,7 +3,8 @@ const CommentRepository = require('../repositories/comments.repository');
 class CommentService {
   commentRepository = new CommentRepository();
 
-  findAllComment = async (postId) => {
+  findAllComment = async (req) => {
+    const { postId } = req.params;
     const result = await this.commentRepository.findAllComment(postId);
     return result.map((x) => {
       return {

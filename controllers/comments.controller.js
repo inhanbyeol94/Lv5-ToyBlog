@@ -4,9 +4,8 @@ class CommentsController {
   commentService = new CommentService();
 
   getComments = async (req, res, next) => {
-    const { postId } = req.params;
-    const findAllComment = await this.commentService.findAllComment(postId);
-    return res.status(200).json({ comments: findAllComment });
+    const { code, result } = await this.commentService.findAllComment(req);
+    return res.status(code).json({ comments: result });
   };
 
   createComment = async (req, res, next) => {

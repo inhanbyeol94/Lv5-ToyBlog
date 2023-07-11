@@ -9,6 +9,12 @@ app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(cookieParser());
 
+app.use((err, req, res, next) => {
+  // 에러 처리 부분
+  console.error(err.stack); // 에러 메시지 표시
+  res.status(500).json({ message: '오류가 발생하였습니다.' }); // 500 상태 표시 후 에러 메시지 전송
+});
+
 fs.readdirSync('./Routes').forEach((Route) => {
   app.use('/', require(`./Routes/${Route}`));
 });
