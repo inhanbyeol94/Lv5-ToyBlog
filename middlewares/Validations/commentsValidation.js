@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const Joi = require('joi');
 const { comment, database, error } = require('../../message.json');
-const { Post, Comment } = require('../../models');
 
 const commentsValidation = {
   createValidation: async (req, res, next) => {
@@ -16,14 +15,6 @@ const commentsValidation = {
       await schema.validateAsync({ postId, content });
     } catch (err) {
       return res.status(412).json({ message: err.message });
-    }
-
-    try {
-      const findPost = await Post.findOne({ where: { post_id: postId } });
-      if (!findPost) return res.status(412).json({ message: database.postNotfound });
-    } catch (err) {
-      console.error(err);
-      return res.status(412).json({ message: error });
     }
 
     next();
@@ -45,19 +36,6 @@ const commentsValidation = {
       return res.status(412).json({ message: err.message });
     }
 
-    try {
-      const findPost = await Post.findOne({ where: { post_id: postId } });
-      const findComment = await Comment.findOne({ where: { comment_id: commentId } });
-      const commentAuthorValid = await Comment.findOne({ where: { comment_id: commentId, user_id: id } });
-
-      if (!findPost) return res.status(412).json({ message: database.postNotfound });
-      if (!findComment) return res.status(412).json({ message: database.commentNotfound });
-      if (!commentAuthorValid) return res.status(412).json({ message: database.commentsAuthorNotFound });
-    } catch (err) {
-      console.error(err);
-      return res.status(412).json({ message: error });
-    }
-
     next();
   },
 
@@ -75,19 +53,6 @@ const commentsValidation = {
       return res.status(412).json({ message: err.message });
     }
 
-    try {
-      const findPost = await Post.findOne({ where: { post_id: postId } });
-      const findComment = await Comment.findOne({ where: { comment_id: commentId } });
-      const commentAuthorValid = await Comment.findOne({ where: { comment_id: commentId, user_id: id } });
-
-      if (!findPost) return res.status(412).json({ message: database.postNotfound });
-      if (!findComment) return res.status(412).json({ message: database.commentNotfound });
-      if (!commentAuthorValid) return res.status(412).json({ message: database.commentsAuthorNotFound });
-    } catch (err) {
-      console.error(err);
-      return res.status(412).json({ message: error });
-    }
-
     next();
   },
 
@@ -100,14 +65,6 @@ const commentsValidation = {
       await schema.validateAsync({ postId });
     } catch (err) {
       return res.status(412).json({ message: err.message });
-    }
-
-    try {
-      const findPost = await Post.findOne({ where: { post_id: postId } });
-      if (!findPost) return res.status(412).json({ message: database.postNotfound });
-    } catch (err) {
-      console.error(err);
-      return res.status(412).json({ message: error });
     }
 
     next();

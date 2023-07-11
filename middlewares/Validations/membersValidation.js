@@ -2,9 +2,6 @@ require('dotenv').config();
 
 const Joi = require('joi');
 const { user } = require('../../message.json');
-const { Member } = require('../../models');
-const crypto = require('crypto');
-const { SECRET_KEY } = process.env;
 
 const membersValidation = {
   signUpValidation: async (req, res, next) => {
@@ -39,14 +36,6 @@ const membersValidation = {
       return res.status(412).json({ message: err.message });
     }
 
-    try {
-      if (await Member.findOne({ where: { user_id: body.id } })) return res.status(412).json({ message: user.overlapId });
-      if (await Member.findOne({ where: { nickname: body.nickname } })) return res.status(412).json({ message: user.overlapNickname });
-    } catch (err) {
-      console.error(err);
-      return res.status(400).json({ message: '오류가 발생하였습니다.' });
-    }
-
     next();
   },
   signInValidation: async (req, res, next) => {
@@ -71,15 +60,6 @@ const membersValidation = {
       await schema.validateAsync(body);
     } catch (err) {
       return res.status(412).json({ message: err.message });
-    }
-    const passwordToCrypto = crypto.pbkdf2Sync(body.password, SECRET_KEY.toString('hex'), 11524, 64, 'sha512').toString('hex');
-    const signInUserValidation = await Member.findOne({ where: { user_id: body.id, password: passwordToCrypto } });
-
-    try {
-      if (!signInUserValidation) return res.status(412).json({ message: user.signInError });
-    } catch (err) {
-      console.error(err);
-      return res.status(400).json({ message: '오류가 발생하였습니다.' });
     }
 
     next();
