@@ -1,38 +1,63 @@
 const CommentService = require('../services/comments.service');
 
 class CommentsController {
-  commentService = new CommentService();
+    commentService = new CommentService();
 
-  getComments = async (req, res, next) => {
-    const { code, result } = await this.commentService.findAllComment(req);
-    return res.status(code).json({ comments: result });
-  };
+    getComments = async (req, res) => {
+        try {
+            const { postId } = req.params;
+            const { code, result } = await this.commentService.findAllComment({ postId });
+            return res.status(code).json({ comments: result });
+        } catch (err) {
+            if (err.code) return res.status(err.code).json({ message: err.result });
+            console.error(err);
+            return res.status(500).json({ message: '오류가 발생하였습니다.' });
+        }
+    };
 
-  createComment = async (req, res, next) => {
-    const { postId } = req.params;
-    const { content } = req.body;
-    const { id } = res.locals.user;
+    createComment = async (req, res) => {
+        try {
+            const { postId } = req.params;
+            const { content } = req.body;
+            const { id } = res.locals.user;
 
-    await this.commentService.createComment(postId, id, content);
-    return res.status(200).json({ message: '댓글이 정상 등록되었습니다.' });
-  };
+            const { code, result, commentId } = await this.commentService.createComment({ postId, id, content });
+            return res.status(code).json({ message: result, commentId });
+        } catch (err) {
+            if (err.code) return res.status(err.code).json({ message: err.result });
+            console.error(err);
+            return res.status(500).json({ message: '오류가 발생하였습니다.' });
+        }
+    };
 
-  updateComment = async (req, res, next) => {
-    const { postId, commentId } = req.params;
-    const { content } = req.body;
-    const { id } = res.locals.user;
+    updateComment = async (req, res) => {
+        try {
+            const { postId, commentId } = req.params;
+            const { content } = req.body;
+            const { id } = res.locals.user;
 
-    await this.commentService.updateComment(postId, commentId, id, content);
-    return res.status(200).json({ message: '댓글이 정상 수정되었습니다.' });
-  };
+            const { code, result } = await this.commentService.updateComment({ postId, commentId, id, content });
+            return res.status(code).json({ message: result });
+        } catch (err) {
+            if (err.code) return res.status(err.code).json({ message: err.result });
+            console.error(err);
+            return res.status(500).json({ message: '오류가 발생하였습니다.' });
+        }
+    };
 
-  deleteComment = async (req, res, next) => {
-    const { postId, commentId } = req.params;
-    const { id } = res.locals.user;
+    deleteComment = async (req, res) => {
+        try {
+            const { postId, commentId } = req.params;
+            const { id } = res.locals.user;
 
-    await this.commentService.deleteComment(postId, commentId, id);
-    return res.status(200).json({ message: '댓글이 정상 삭제되었습니다.' });
-  };
+            const { code, result } = await this.commentService.deleteComment({ postId, commentId, id });
+            return res.status(code).json({ message: result });
+        } catch (err) {
+            if (err.code) return res.status(err.code).json({ message: err.result });
+            console.error(err);
+            return res.status(500).json({ message: '오류가 발생하였습니다.' });
+        }
+    };
 }
 
 module.exports = CommentsController;
