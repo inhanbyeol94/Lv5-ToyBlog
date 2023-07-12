@@ -7,16 +7,18 @@ class PostService {
         const result = await this.postRepository.findAll();
         return {
             code: 201,
-            result: result.map((x) => {
-                return {
-                    postId: x.post_id,
-                    title: x.title,
-                    nickname: x.Member.nickname,
-                    content: x.content,
-                    createdAt: new Date(x.created_at).toLocaleString(),
-                    like: x.Likes.like,
-                };
-            }),
+            result: result
+                .sort((a, b) => b.like - a.like)
+                .map((x) => {
+                    return {
+                        postId: x.post_id,
+                        title: x.title,
+                        nickname: x.Member.nickname,
+                        content: x.content,
+                        createdAt: new Date(x.created_at).toLocaleString(),
+                        like: x.like,
+                    };
+                }),
         };
     };
 
