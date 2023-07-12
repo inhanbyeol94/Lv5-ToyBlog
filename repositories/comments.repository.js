@@ -2,19 +2,19 @@ const { Op } = require('sequelize');
 const { Comment, Member } = require('../models');
 
 class CommentRepository {
-    findAllComment = async (target) => {
-        return await Comment.findAll({ where: { [Op.and]: target }, attributes: ['comment_id', 'content', 'created_at', 'updated_at'], include: [{ model: Member, attributes: ['nickname'] }], order: [['created_at', 'DESC']] });
+    findAll = async (target) => {
+        return await Comment.findAll({ where: { [Op.and]: target }, include: [{ model: Member }], order: [['created_at', 'DESC']], raw: true, nest: true });
     };
-    findOneComment = async (target) => {
-        return await Comment.findOne({ where: { [Op.and]: target } });
+    findOne = async (target) => {
+        return await Comment.findOne({ where: { [Op.and]: target }, raw: true, nest: true });
     };
-    createComment = async (data) => {
+    createOne = async (data) => {
         return await Comment.create(data);
     };
-    updateComment = async (data, target) => {
+    updateOne = async (data, target) => {
         return await Comment.update(data, { where: { [Op.and]: target } });
     };
-    deleteComment = async (target) => {
+    deleteOne = async (target) => {
         return await Comment.destroy({ where: { [Op.and]: target } });
     };
 }
