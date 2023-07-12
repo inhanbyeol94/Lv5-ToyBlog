@@ -2,7 +2,7 @@ const { Post, Member, Like } = require('../models');
 const { Op, Sequelize } = require('sequelize');
 
 class PostRepository {
-    findAllPost = async () => {
+    findAll = async () => {
         return await Post.findAll({
             include: [
                 { model: Member, attributes: ['nickname'] },
@@ -13,19 +13,19 @@ class PostRepository {
         });
     };
 
-    findOnePost = async (target) => {
+    findOne = async (target) => {
         return await Post.findOne({ where: { [Op.and]: target }, include: [{ model: Member }], attributes: { include: [[Sequelize.literal(`(SELECT COUNT(*) FROM Likes WHERE post_id = Post.post_id)`), 'like']] }, raw: true, nest: true });
     };
 
-    createPost = async (data) => {
+    createOne = async (data) => {
         return await Post.create(data);
     };
 
-    updatePost = async (data, target) => {
+    updateOne = async (data, target) => {
         return await Post.update(data, { where: { [Op.and]: target } });
     };
 
-    deletePost = async (target) => {
+    deleteOne = async (target) => {
         return await Post.destroy({ where: { [Op.and]: target } });
     };
 }
