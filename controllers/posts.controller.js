@@ -3,7 +3,7 @@ const PostService = require('../services/posts.service');
 class PostsController {
   postService = new PostService();
 
-  getPosts = async (req, res, next) => {
+  getPosts = async (req, res) => {
     try {
       const { code, result } = await this.postService.findAllPost();
       return res.status(code).json({ posts: result });
@@ -14,7 +14,7 @@ class PostsController {
     }
   };
 
-  getPost = async (req, res, next) => {
+  getPost = async (req, res) => {
     try {
       const { postId } = req.params;
       const { code, result } = await this.postService.findOnePost({ postId });
@@ -26,7 +26,7 @@ class PostsController {
     }
   };
 
-  createPost = async (req, res, next) => {
+  createPost = async (req, res) => {
     try {
       const { title, content } = req.body;
       const { id } = res.locals.user;
@@ -39,7 +39,7 @@ class PostsController {
     }
   };
 
-  updatePost = async (req, res, next) => {
+  updatePost = async (req, res) => {
     try {
       const { postId } = req.params;
       const { title, content } = req.body;
@@ -53,7 +53,7 @@ class PostsController {
     }
   };
 
-  deletePost = async (req, res, next) => {
+  deletePost = async (req, res) => {
     try {
       const { postId } = req.params;
       const { id } = res.locals.user;
