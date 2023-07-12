@@ -23,7 +23,7 @@ class PostService {
     };
 
     findOnePost = async ({ postId }) => {
-        const result = await this.postRepository.findOne([{ post_id: postId }]);
+        const result = await this.postRepository.findOne({ post_id: postId });
         if (!result) throw { code: 404, result: '존재하지 않는 게시물입니다.' };
         return {
             code: 200,
@@ -44,7 +44,7 @@ class PostService {
     };
 
     updatePost = async ({ postId, title, content, id }) => {
-        const findPost = await this.postRepository.findOne([{ post_id: postId }]);
+        const findPost = await this.postRepository.findOne({ post_id: postId });
 
         if (!findPost) throw { code: 404, result: '존재하지 않는 게시물입니다.' };
         if (findPost.user_id !== id) throw { code: 401, result: '본인이 작성한 게시물만 수정이 가능합니다.' };
@@ -54,7 +54,7 @@ class PostService {
     };
 
     deletePost = async ({ postId, id }) => {
-        const findPost = await this.postRepository.findOne([{ post_id: postId }]);
+        const findPost = await this.postRepository.findOne({ post_id: postId });
         if (!findPost) throw { code: 404, result: '존재하지 않는 게시물입니다.' };
         if (findPost.user_id !== id) throw { code: 401, result: '본인이 작성한 게시물만 삭제가 가능합니다.' };
 
