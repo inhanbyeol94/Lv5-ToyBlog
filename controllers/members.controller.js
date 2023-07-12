@@ -3,7 +3,7 @@ const MemberService = require('../services/members.service');
 class MembersController {
   memberService = new MemberService();
 
-  signUp = async (req, res, next) => {
+  signUp = async (req, res) => {
     try {
       const { id, nickname, password } = req.body;
       const { code, result } = await this.memberService.createMember({ id, nickname, password });
@@ -15,7 +15,7 @@ class MembersController {
     }
   };
 
-  login = async (req, res, next) => {
+  login = async (req, res) => {
     try {
       const { id, password } = req.body;
       const { code, result, token } = await this.memberService.login({ id, password });

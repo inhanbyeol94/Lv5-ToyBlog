@@ -16,7 +16,7 @@ class MemberService {
     if (overlapNickname) throw { code: 405, result: '이미 사용중인 닉네임입니다.' };
 
     const passwordToCrypto = crypto.pbkdf2Sync(password, SECRET_KEY.toString('hex'), 11524, 64, 'sha512').toString('hex');
-    await this.memberRepository.createMember({ id, nickname, passwordToCrypto });
+    await this.memberRepository.createMember({ user_id: id, nickname, password: passwordToCrypto });
 
     return { code: 200, result: '회원가입이 완료되었습니다.' };
   };
