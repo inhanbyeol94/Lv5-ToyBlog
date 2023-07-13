@@ -12,7 +12,13 @@ class PostRepository {
     };
 
     findOne = async (target) => {
-        return await Post.findOne({ where: { [Op.and]: target }, include: [{ model: Member }], attributes: { include: [[Sequelize.literal(`(SELECT COUNT(*) FROM Likes WHERE post_id = Post.post_id)`), 'like']] }, raw: true, nest: true });
+        return await Post.findOne({
+            where: { [Op.and]: target },
+            include: [{ model: Member }],
+            attributes: { include: [[Sequelize.literal(`(SELECT COUNT(*) FROM Likes WHERE post_id = Post.post_id)`), 'like']] },
+            raw: true,
+            nest: true,
+        });
     };
 
     createOne = async (data) => {
